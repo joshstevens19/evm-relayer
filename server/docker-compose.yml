@@ -1,0 +1,57 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+    driver: local
+
+x-common-environment: &common-environment
+  image: node:16
+  working_dir: /app
+  volumes:
+    - ./:/app
+  restart: on-failure
+  env_file:
+    - ./.env.local
+  depends_on:
+    postgresql:
+      condition: service_healthy
+    flyway:
+      condition: service_completed_successfully
+  links:
+    - postgresql
+
+services:
+  postgresql:
+    image: postgres:11.1-alpine
+    shm_size: 1g
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5439:5432
+    env_file:
+      - ./.env.local
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -q']
+      interval: 5s
+      timeout: 10s
+      retries: 10
+  flyway:
+    image: flyway/flyway:6.3.1
+    env_file:
+      - ./.env.local
+    command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    volumes:
+      - ${PWD}/migrations:/flyway/sql
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    links:
+      - postgresql
+
+  api:
+    <<: *common-environment
+    ports:
+      - 4004:4004
+    command: 'npm run start:dev'
