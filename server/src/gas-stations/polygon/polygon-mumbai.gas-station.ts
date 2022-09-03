@@ -9,8 +9,8 @@ interface PolygonGasStationResult<T> {
   blockNumber: T;
 }
 
-export class PolygonMainnetGasStation extends BasePolygonGasStation {
+export class PolygonMumbaiGasStation extends BasePolygonGasStation {
   constructor() {
-    super('https://gasstation-mainnet.matic.network');
+    super('https://gasstation-mumbai.matic.today');
   }
 }
