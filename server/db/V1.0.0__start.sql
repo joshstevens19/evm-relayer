@@ -10,8 +10,19 @@ INSERT INTO "network" ("name", "chain_id") VALUES ('mainnet', 1);
 CREATE TABLE "enabled_network" (
   "name" varchar(50) PRIMARY KEY not null,
   "provider_url" varchar(200) not null,
-  "gas_price_api_key" varchar(100) not null,
+  -- "gas_price_api_key" varchar(100) not null,
 );
+
+ALTER TABLE "enabled_network" ADD CONSTRAINT "fk_enabled_network__name" FOREIGN KEY ("network") REFERENCES "network" ("name");
+
+-- can have many providers per network to split the traffic between nodes
+CREATE TABLE "enabled_network_nodes" (
+  "name" varchar(50) PRIMARY KEY not null,
+  "provider_url" varchar(200) not null,
+  PRIMARY KEY ("name", "provider_url")
+);
+
+ALTER TABLE "enabled_network_nodes" ADD CONSTRAINT "fk_enabled_network_nodes__name" FOREIGN KEY ("enabled_network") REFERENCES "enabled_network" ("name");
 
 CREATE TABLE "relay" (
   "id" uuid PRIMARY KEY not null,
@@ -58,7 +69,7 @@ CREATE TABLE "relay_speed" (
    "name" varchar(50) PRIMARY KEY not null
 );
 
-INSERT INTO "relay_speed" ("name") VALUES ('super'), ('fast'), ('medium'), ('slow'), ('very_slow');
+INSERT INTO "relay_speed" ("name") VALUES ('SUPER'), ('FAST'), ('MEDIUM'), ('SLOW'), ('VERY_SLOW');
 
 CREATE TABLE "relay_tx_status" (
    "status" varchar(50) PRIMARY KEY not null
