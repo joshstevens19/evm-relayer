@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RelaySpeed } from 'src/enums/relay-speed';
+import { RelaySpeed } from '../enums/relay-speed';
 
 export interface EIP1559GasPrice {
   maxPriorityFee: number;

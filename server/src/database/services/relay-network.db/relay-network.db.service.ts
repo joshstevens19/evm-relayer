@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseDBProvider } from 'src/database/providers/base-db-provider';
+import { BaseDBProvider } from '../../providers/base-db-provider';
 import { sql } from '../../sql/sql-loader';
 import { SupportedNetworkDb } from './db-models';
 import { EnabledNetworkDb } from './db-models/enabled-network.db';

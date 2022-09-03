@@ -1,4 +1,4 @@
-import { RelaySpeed } from 'src/enums/relay-speed';
+import { RelaySpeed } from '../../enums/relay-speed';
 import {
   BaseGasStation,
   EIP1559GasPrice,
