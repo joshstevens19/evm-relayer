@@ -1,5 +1,5 @@
 import pgPromise from 'pg-promise';
-import { logger } from '../../logger';
+import { logger } from '../../../logger';
 import {
   DATABASE_HOST,
   DATABASE_NAME,

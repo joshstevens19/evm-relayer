@@ -5,7 +5,7 @@ CREATE TABLE "network" (
 );
 
 -- TODO add some more!
-INSERT INTO "network" ("name", "chain_id") VALUES ('mainnet', 1);
+INSERT INTO "network" ("name", "chain_id") VALUES ('polygon', 137), ('mumbai', 80001);
 
 CREATE TABLE "enabled_network" (
   "name" varchar(50) PRIMARY KEY not null,

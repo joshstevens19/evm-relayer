@@ -1,4 +1,4 @@
-import { getParamOrExit } from '../../utils/env-helpers';
+import { getParamOrExit } from '../../../utils/env-helpers';
 
 export const DATABASE_NAME = getParamOrExit('DATABASE_NAME');
 export const DATABASE_USER = getParamOrExit('DATABASE_USER');
