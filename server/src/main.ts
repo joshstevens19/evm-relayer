@@ -1,8 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { APIModule } from './api.module';
-import { sqlLoader } from './database/services/sql-loader';
+import {
+  DatabaseProvider,
+  initializeDatabaseProvider,
+} from './database/providers/db-provider-loader';
+import { sqlLoader } from './database/sql/sql-loader';
 
 async function bootstrap() {
+  // startup database
+  // this will change to .env file once we support more then postgres
+  initializeDatabaseProvider(DatabaseProvider.POSTGRES);
+
   // load the sql up in memory
   await sqlLoader();
 
