@@ -38,11 +38,9 @@ export const pgp = pgPromise({
 
     logger.error(`POSTGRES ERROR: ${error.message || error}`, error);
 
-    throw new Error(
-      'Bad things happened on db - should be above to avoid spamming logs!',
-    );
+    throw error;
   },
-  schema: ['public', 'developer_portal', 'proof_of_humanity'],
+  schema: ['public'],
 });
 
 const connectionParams = {
