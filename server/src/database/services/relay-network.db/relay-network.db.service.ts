@@ -20,4 +20,17 @@ export class RelayNetworkDbService extends InjectedDBProvider {
   public enabledNetworks(): Promise<EnabledNetworkDb[]> {
     return this.queryDb<EnabledNetworkDb[]>(sql.networks.enabledNetworks);
   }
+
+  /**
+   * Enable a network to use for your relay
+   */
+  public enableNetwork(
+    networkName: string,
+    providerUrls: string[],
+  ): Promise<void> {
+    return this.none(sql.networks.insertNetwork, {
+      networkName,
+      providerUrls,
+    });
+  }
 }

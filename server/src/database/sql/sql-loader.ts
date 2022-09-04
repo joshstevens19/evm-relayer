@@ -12,6 +12,7 @@ export const sql: {
   networks: {
     supportedNetworks: string;
     enabledNetworks: string;
+    insertNetwork: string;
   };
 } = {
   // @ts-ignore
@@ -21,4 +22,5 @@ export const sql: {
 export const sqlLoader = async () => {
   sql.networks.supportedNetworks = await getSql('get-supported-networks.sql');
   sql.networks.enabledNetworks = await getSql('get-enabled-networks.sql');
+  sql.networks.insertNetwork = await getSql('insert-network.sql');
 };

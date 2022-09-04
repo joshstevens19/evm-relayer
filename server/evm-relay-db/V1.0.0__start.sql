@@ -8,9 +8,7 @@ CREATE TABLE "network" (
 INSERT INTO "network" ("name", "chain_id") VALUES ('polygon', 137), ('mumbai', 80001);
 
 CREATE TABLE "enabled_network" (
-  "name" varchar(50) PRIMARY KEY not null,
-  "provider_url" varchar(200) not null
-  -- "gas_price_api_key" varchar(100) not null,
+  "name" varchar(50) PRIMARY KEY not null
 );
 
 ALTER TABLE "enabled_network" ADD CONSTRAINT "fk_enabled_network__name" FOREIGN KEY ("name") REFERENCES "network" ("name");

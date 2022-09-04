@@ -33,4 +33,14 @@ export class RelayNetworkService {
       };
     });
   }
+
+  /**
+   * Enable a network to use for your relay
+   */
+  public enableNetwork(
+    networkName: string,
+    providerUrls: string[],
+  ): Promise<void> {
+    return this._relayNetworkDbService.enableNetwork(networkName, providerUrls);
+  }
 }
