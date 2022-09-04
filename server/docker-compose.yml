@@ -43,7 +43,7 @@ services:
       - ./.env.local
     command: -locations=filesystem:/flyway/sql -connectRetries=60 migrate
     volumes:
-      - ${PWD}/migrations:/flyway/sql
+      - ${PWD}/evm-relay-db:/flyway/sql
     depends_on:
       postgresql:
         condition: service_healthy

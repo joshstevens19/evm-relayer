@@ -4,21 +4,21 @@ var path = require('path');
 const getPath = (fileName: string) =>
   path.join(__dirname, '..', 'sql', fileName);
 
-let getSupportedNetworks: string;
-let getEnabledNetworks: string;
-
 const getSql = (fileName: string) => {
   return fs.readFile(getPath(fileName), 'utf8');
 };
 
-export const sqlLoader = async () => {
-  getSupportedNetworks = await getSql('get-supported-networks.sql');
-  getEnabledNetworks = await getSql('get-enabled-networks.sql');
+export const sql: {
+  networks: {
+    supportedNetworks: string;
+    enabledNetworks: string;
+  };
+} = {
+  // @ts-ignore
+  networks: {},
 };
 
-export const sql = {
-  networks: {
-    supportedNetworks: getSupportedNetworks,
-    enabledNetworks: getEnabledNetworks,
-  },
+export const sqlLoader = async () => {
+  sql.networks.supportedNetworks = await getSql('get-supported-networks.sql');
+  sql.networks.enabledNetworks = await getSql('get-enabled-networks.sql');
 };

@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { APIModule } from './api.module';
 import {
@@ -15,6 +16,7 @@ async function bootstrap() {
   await sqlLoader();
 
   const app = await NestFactory.create(APIModule);
-  await app.listen(3000);
+  await app.listen(4004);
+  Logger.log('Listening on localhost:4004');
 }
 bootstrap();

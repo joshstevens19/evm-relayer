@@ -9,20 +9,20 @@ INSERT INTO "network" ("name", "chain_id") VALUES ('polygon', 137), ('mumbai', 8
 
 CREATE TABLE "enabled_network" (
   "name" varchar(50) PRIMARY KEY not null,
-  "provider_url" varchar(200) not null,
+  "provider_url" varchar(200) not null
   -- "gas_price_api_key" varchar(100) not null,
 );
 
-ALTER TABLE "enabled_network" ADD CONSTRAINT "fk_enabled_network__name" FOREIGN KEY ("network") REFERENCES "network" ("name");
+ALTER TABLE "enabled_network" ADD CONSTRAINT "fk_enabled_network__name" FOREIGN KEY ("name") REFERENCES "network" ("name");
 
 -- can have many providers per network to split the traffic between nodes
 CREATE TABLE "enabled_network_nodes" (
-  "name" varchar(50) PRIMARY KEY not null,
+  "name" varchar(50) not null,
   "provider_url" varchar(200) not null,
   PRIMARY KEY ("name", "provider_url")
 );
 
-ALTER TABLE "enabled_network_nodes" ADD CONSTRAINT "fk_enabled_network_nodes__name" FOREIGN KEY ("enabled_network") REFERENCES "enabled_network" ("name");
+ALTER TABLE "enabled_network_nodes" ADD CONSTRAINT "fk_enabled_network_nodes__name" FOREIGN KEY ("name") REFERENCES "enabled_network" ("name");
 
 CREATE TABLE "relay" (
   "id" uuid PRIMARY KEY not null,
@@ -34,7 +34,7 @@ CREATE TABLE "relay" (
   "created_at" timestamp DEFAULT now() not null
 );
 
-ALTER TABLE "relay" ADD CONSTRAINT "fk_relay__network" FOREIGN KEY ("enabled_network") REFERENCES "enabled_network" ("name");
+ALTER TABLE "relay" ADD CONSTRAINT "fk_relay__network" FOREIGN KEY ("name") REFERENCES "enabled_network" ("name");
 
 CREATE TABLE "relay_api_key" (
   "api_key" varchar(500) PRIMARY KEY not null,
@@ -43,7 +43,7 @@ CREATE TABLE "relay_api_key" (
   "created_at" timestamp DEFAULT now() not null
 );
 
-ALTER TABLE "relay_api_key" ADD CONSTRAINT "fk_relay_api_key__relay_id" FOREIGN KEY ("relay") REFERENCES "relay" ("id");
+ALTER TABLE "relay_api_key" ADD CONSTRAINT "fk_relay_api_key__relay_id" FOREIGN KEY ("relay_id") REFERENCES "relay" ("id");
 
 CREATE TABLE "relay_whitelisted_contracts" (
   "address" char(42) not null,
@@ -53,17 +53,17 @@ CREATE TABLE "relay_whitelisted_contracts" (
    PRIMARY KEY ("address", "relay_id")
 );
 
-ALTER TABLE "relay_whitelisted_contracts" ADD CONSTRAINT "fk_relay_whitelisted_contracts__relay_id" FOREIGN KEY ("relay") REFERENCES "relay" ("id");
+ALTER TABLE "relay_whitelisted_contracts" ADD CONSTRAINT "fk_relay_whitelisted_contracts__relay_id" FOREIGN KEY ("relay_id") REFERENCES "relay" ("id");
 
 CREATE TABLE "relay_settings" (
   "relay_id" uuid PRIMARY KEY not null,
   "max_gas_price_cap" varchar(100) null,
   "paused" boolean DEFAULT false not null,
   "eip_1559_enabled" boolean DEFAULT false not null,
-  "updated_on" timestamp DEFAULT now() not null,
+  "updated_on" timestamp DEFAULT now() not null
 );
 
-ALTER TABLE "relay_settings" ADD CONSTRAINT "fk_relay_settings__relay_id" FOREIGN KEY ("relay") REFERENCES "relay" ("id");
+ALTER TABLE "relay_settings" ADD CONSTRAINT "fk_relay_settings__relay_id" FOREIGN KEY ("relay_id") REFERENCES "relay" ("id");
 
 CREATE TABLE "relay_speed" (
    "name" varchar(50) PRIMARY KEY not null
@@ -90,14 +90,14 @@ CREATE TABLE "relay_tx_pending" (
   "tx_sent_at" timestamp not null,
   "expiration_time" timestamp not null,
   "speed" varchar(30) not null,
-  "status" varchar(50) not null,
+  "tx_status" varchar(50) not null,
   "created_at" timestamp DEFAULT now() not null,
   "updated_on" timestamp DEFAULT now() not null
 );
 
-ALTER TABLE "relay_tx_pending" ADD CONSTRAINT "fk_relay_tx_pending__relay_id" FOREIGN KEY ("relay") REFERENCES "relay" ("id");
-ALTER TABLE "relay_tx_pending" ADD CONSTRAINT "fk_relay_tx_pending__speed" FOREIGN KEY ("relay_speed") REFERENCES "relay_speed" ("name");
-ALTER TABLE "relay_tx_pending" ADD CONSTRAINT "fk_relay_tx_pending__status" FOREIGN KEY ("relay_tx_status") REFERENCES "relay_tx_status" ("name");
+ALTER TABLE "relay_tx_pending" ADD CONSTRAINT "fk_relay_tx_pending__relay_id" FOREIGN KEY ("relay_id") REFERENCES "relay" ("id");
+ALTER TABLE "relay_tx_pending" ADD CONSTRAINT "fk_relay_tx_pending__speed" FOREIGN KEY ("speed") REFERENCES "relay_speed" ("name");
+ALTER TABLE "relay_tx_pending" ADD CONSTRAINT "fk_relay_tx_pending__status" FOREIGN KEY ("tx_status") REFERENCES "relay_tx_status" ("status");
 
 CREATE TABLE "relay_tx_pending_audit_log" (
   "tx_id" uuid PRIMARY KEY not null,
@@ -111,13 +111,13 @@ CREATE TABLE "relay_tx_pending_audit_log" (
   "gas_limit" varchar(66) not null,
   "expiration_time" timestamp not null,
   "speed" varchar(30) not null,
-  "status" varchar(50) not null,
+  "tx_status" varchar(50) not null,
   "created_at" timestamp DEFAULT now() not null
 );
 
-ALTER TABLE "relay_tx_pending_audit_log" ADD CONSTRAINT "fk_relay_tx_pending_audit_log__relay_id" FOREIGN KEY ("relay") REFERENCES "relay" ("id");
-ALTER TABLE "relay_tx_pending_audit_log" ADD CONSTRAINT "fk_relay_tx_pending_audit_log__speed" FOREIGN KEY ("relay_speed") REFERENCES "relay_speed" ("name");
-ALTER TABLE "relay_tx_pending_audit_log" ADD CONSTRAINT "fk_relay_tx_pending_audit_log__status" FOREIGN KEY ("relay_tx_status") REFERENCES "relay_tx_status" ("name");
+ALTER TABLE "relay_tx_pending_audit_log" ADD CONSTRAINT "fk_relay_tx_pending_audit_log__relay_id" FOREIGN KEY ("relay_id") REFERENCES "relay" ("id");
+ALTER TABLE "relay_tx_pending_audit_log" ADD CONSTRAINT "fk_relay_tx_pending_audit_log__speed" FOREIGN KEY ("speed") REFERENCES "relay_speed" ("name");
+ALTER TABLE "relay_tx_pending_audit_log" ADD CONSTRAINT "fk_relay_tx_pending_audit_log__status" FOREIGN KEY ("tx_status") REFERENCES "relay_tx_status" ("status");
 
 CREATE TABLE "relay_tx_completed" (
   "tx_id" uuid PRIMARY KEY not null,
@@ -135,12 +135,12 @@ CREATE TABLE "relay_tx_completed" (
   "status" boolean not null,
   "expiration_time" timestamp not null,
   "speed" varchar(30) not null,
-  "status" varchar(50) not null,
+  "tx_status" varchar(50) not null,
   "date_completed" timestamp not null,
   "created_at" timestamp DEFAULT now() not null
 );
 
-ALTER TABLE "relay_tx_completed" ADD CONSTRAINT "fk_relay_tx_completed__relay_id" FOREIGN KEY ("relay") REFERENCES "relay" ("id");
-ALTER TABLE "relay_tx_completed" ADD CONSTRAINT "fk_relay_tx_completed__speed" FOREIGN KEY ("relay_speed") REFERENCES "relay_speed" ("name");
-ALTER TABLE "relay_tx_completed" ADD CONSTRAINT "fk_relay_tx_completed__status" FOREIGN KEY ("relay_tx_status") REFERENCES "relay_tx_status" ("name");
+ALTER TABLE "relay_tx_completed" ADD CONSTRAINT "fk_relay_tx_completed__relay_id" FOREIGN KEY ("relay_id") REFERENCES "relay" ("id");
+ALTER TABLE "relay_tx_completed" ADD CONSTRAINT "fk_relay_tx_completed__speed" FOREIGN KEY ("speed") REFERENCES "relay_speed" ("name");
+ALTER TABLE "relay_tx_completed" ADD CONSTRAINT "fk_relay_tx_completed__status" FOREIGN KEY ("tx_status") REFERENCES "relay_tx_status" ("status");
 

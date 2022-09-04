@@ -1,4 +1,4 @@
 SELECT 
-    [name],
+    name,
     chain_id
 FROM network;
