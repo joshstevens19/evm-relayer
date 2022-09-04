@@ -1,9 +1,5 @@
-import {
-  exists as postgresExists,
-  none as postgresNone,
-  oneOrNone as postgresOneOrNone,
-  queryDb as postgresQueryDb,
-} from './postgres/db-execution';
+import { BaseDBProvider } from './base-db-provider';
+import { PostgresDbProvider } from './postgres/postgres-db-provider';
 
 /**
  * Database providers this supports for now we can extend it!
@@ -12,22 +8,7 @@ export enum DatabaseProvider {
   POSTGRES = 'POSTGRES',
 }
 
-// @ts-ignore
-export let dbProvider: {
-  oneOrNone: <TResponse>(
-    query: string,
-    params?: Record<string, any> | null,
-  ) => Promise<TResponse>;
-  none: (query: string, params?: Record<string, any> | null) => Promise<void>;
-  exists: (
-    query: string,
-    params?: Record<string, any> | null,
-  ) => Promise<boolean>;
-  queryDb: <TResponse>(
-    query: string,
-    params?: Record<string, any> | null,
-  ) => Promise<TResponse>;
-} = {};
+export let dbProvider: BaseDBProvider;
 
 export const initializeDatabaseProvider = (
   databaseProvider: DatabaseProvider,
@@ -41,10 +22,5 @@ export const initializeDatabaseProvider = (
 };
 
 export const initializePostgres = () => {
-  dbProvider = {
-    oneOrNone: postgresOneOrNone,
-    none: postgresNone,
-    exists: postgresExists,
-    queryDb: postgresQueryDb,
-  };
+  dbProvider = new PostgresDbProvider();
 };

@@ -1,25 +1,23 @@
-import { dbProvider } from './db-provider-loader';
-
-export class BaseDBProvider {
-  public oneOrNone(
+export abstract class BaseDBProvider {
+  public abstract oneOrNone<TResponse>(
     query: string,
-    params: Record<string, any> | null = null,
-  ): Promise<any | null> {
-    return dbProvider.oneOrNone(query, params);
-  }
+    params: Record<string, any> | null,
+  ): Promise<TResponse | null>;
 
-  public none(query: string, params: Record<string, any> | null = null) {
-    return dbProvider.none(query, params);
-  }
+  public abstract none(
+    query: string,
+    params: Record<string, any> | null,
+  ): Promise<void>;
 
-  public exists(query: string, params: Record<string, any> | null = null) {
-    return dbProvider.exists(query, params);
-  }
+  public abstract exists(
+    query: string,
+    params: Record<string, any> | null,
+  ): Promise<Boolean>;
 
-  public queryDb<TResponse>(
+  public abstract queryDb<TResponse>(
     query: string,
     params?: Record<string, any> | null,
-  ) {
-    return dbProvider.queryDb<TResponse>(query, params);
-  }
+  ): Promise<TResponse>;
+
+  public abstract multiDb<TResponse>(queries: any): Promise<TResponse>;
 }

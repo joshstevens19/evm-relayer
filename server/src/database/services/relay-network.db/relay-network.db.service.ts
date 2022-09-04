@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { BaseDBProvider } from '../../providers/base-db-provider';
+import { InjectedDBProvider } from '../../providers/injected-db-provider';
 import { sql } from '../../sql/sql-loader';
 import { SupportedNetworkDb } from './db-models';
 import { EnabledNetworkDb } from './db-models/enabled-network.db';
 
 @Injectable()
-export class RelayNetworkDbService extends BaseDBProvider {
+export class RelayNetworkDbService extends InjectedDBProvider {
   /**
    * Get the supported networks the relayer server can support!
    * Any new ones need a PR with mappings to gas station
