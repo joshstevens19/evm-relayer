@@ -12,7 +12,10 @@ export const sql: {
   networks: {
     supportedNetworks: string;
     enabledNetworks: string;
-    insertNetwork: string;
+    insertEnabledNetwork: string;
+    disableEnabledNetwork: string;
+    insertNetworkNodes: string;
+    deleteNetworkNodes: string;
   };
 } = {
   // @ts-ignore
@@ -22,5 +25,12 @@ export const sql: {
 export const sqlLoader = async () => {
   sql.networks.supportedNetworks = await getSql('get-supported-networks.sql');
   sql.networks.enabledNetworks = await getSql('get-enabled-networks.sql');
-  sql.networks.insertNetwork = await getSql('insert-network.sql');
+  sql.networks.insertEnabledNetwork = await getSql(
+    'insert-enabled-network.sql',
+  );
+  sql.networks.disableEnabledNetwork = await getSql(
+    'disabled-enabled-network.sql',
+  );
+  sql.networks.deleteNetworkNodes = await getSql('delete-network-nodes.sql');
+  sql.networks.insertNetworkNodes = await getSql('insert-network-nodes.sql');
 };

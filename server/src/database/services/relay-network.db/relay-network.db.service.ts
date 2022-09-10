@@ -28,7 +28,42 @@ export class RelayNetworkDbService extends InjectedDBProvider {
     networkName: string,
     providerUrls: string[],
   ): Promise<void> {
-    return this.none(sql.networks.insertNetwork, {
+    return this.none(sql.networks.insertEnabledNetwork, {
+      networkName,
+      providerUrls,
+    });
+  }
+
+  /**
+   * Disable a network this will mean it cant be used in relays anymore
+   */
+  public disableNetwork(networkName: string): Promise<void> {
+    return this.none(sql.networks.disableEnabledNetwork, {
+      networkName,
+    });
+  }
+
+  /**
+   * Add nodes to a enabled network
+   */
+  public addNetworkNodes(
+    networkName: string,
+    providerUrls: string[],
+  ): Promise<void> {
+    return this.none(sql.networks.insertNetworkNodes, {
+      networkName,
+      providerUrls,
+    });
+  }
+
+  /**
+   * Delete nodes to a enabled network
+   */
+  public deleteNetworkNodes(
+    networkName: string,
+    providerUrls: string[],
+  ): Promise<void> {
+    return this.none(sql.networks.deleteNetworkNodes, {
       networkName,
       providerUrls,
     });

@@ -43,4 +43,37 @@ export class RelayNetworkService {
   ): Promise<void> {
     return this._relayNetworkDbService.enableNetwork(networkName, providerUrls);
   }
+
+  /**
+   * Disable a network this will mean it cant be used in relays anymore
+   */
+  public disableNetwork(networkName: string): Promise<void> {
+    return this._relayNetworkDbService.disableNetwork(networkName);
+  }
+
+  /**
+   * Add nodes to a enabled network
+   */
+  public addNetworkNodes(
+    networkName: string,
+    providerUrls: string[],
+  ): Promise<void> {
+    return this._relayNetworkDbService.addNetworkNodes(
+      networkName,
+      providerUrls,
+    );
+  }
+
+  /**
+   * Delete nodes to a enabled network
+   */
+  public deleteNetworkNodes(
+    networkName: string,
+    providerUrls: string[],
+  ): Promise<void> {
+    return this._relayNetworkDbService.deleteNetworkNodes(
+      networkName,
+      providerUrls,
+    );
+  }
 }

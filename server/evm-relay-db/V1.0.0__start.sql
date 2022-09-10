@@ -1,14 +1,16 @@
 CREATE TABLE "network" (
   "name" varchar(50) PRIMARY KEY not null,
-  -- TODO: look at PK for this
   "chain_id" int not null
 );
+
+ALTER TABLE "network" ADD CONSTRAINT network_chain_id UNIQUE (chain_id);
 
 -- TODO add some more!
 INSERT INTO "network" ("name", "chain_id") VALUES ('polygon', 137), ('mumbai', 80001);
 
 CREATE TABLE "enabled_network" (
-  "name" varchar(50) PRIMARY KEY not null
+  "name" varchar(50) PRIMARY KEY not null,
+  "disabled" boolean DEFAULT FALSE not null,
 );
 
 ALTER TABLE "enabled_network" ADD CONSTRAINT "fk_enabled_network__name" FOREIGN KEY ("name") REFERENCES "network" ("name");
