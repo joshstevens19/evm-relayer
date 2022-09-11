@@ -1,0 +1,2 @@
+INSERT INTO relay_tx_pending (tx_id, relay_id, api_key, to, nonce, data, value, gas_price, max_priority_fee_per_gas, max_fee_per_gas, gas_limit, tx_sent_at, expiration_time, speed, tx_status)
+VALUES ($<txId>, $<relayId>, $<apiKey>, $<to>, $<nonce>, $<data>, $<value>, $<gasPrice>, $<maxPriorityFeePerGas>, $<maxFeePerGas>, $<gasLimit>, $<txSentAt>, $<expirationTime>, $<speed>, 'PENDING');
